@@ -1,14 +1,15 @@
 // barriers:
-//(0,49) to (49,49)
 //(0,0) to (149, 0)
-//(0,0) to ()
+//(0,0) to (0,149)
+//(149,0) to (149,149)
+//(0,149) to (149,149)
 
 const canvas = document.getElementById('gridBg');
 const ctx = canvas.getContext('2d');
 let gridSize = 50; // each grid square size
 let offsetX = 0;
 let offsetY = 0;
-const speed = 2;
+const speed = 100;
 const keys = { w: false, a: false, s: false, d: false };
 
 // Shades of gray for 9 sections (3x3)
@@ -17,6 +18,40 @@ const shades = [
   "#808080", "#606060", "#404040",
   "#202020", "#101010", "#000000"
 ];
+
+// Define barriers as lines: [x1, y1, x2, y2] in grid coordinates
+const barriers = [
+  [0, 0, 149, 0],    // top
+  [0, 0, 0, 149],    // left
+  [149, 0, 149, 149],// right
+  [0, 149, 149, 149] // bottom
+];
+
+// Player position in grid coordinates
+let playerX = 75;
+let playerY = 75;
+
+// Helper to check if movement crosses a barrier
+function isBlocked(newX, newY) {
+  // Only block if trying to cross a barrier line
+  for (const [x1, y1, x2, y2] of barriers) {
+    // Vertical barrier
+    if (x1 === x2) {
+      if (
+        ((playerX < x1 && newX >= x1) || (playerX > x1 && newX <= x1)) &&
+        ((playerY >= y1 && playerY <= y2) || (playerY >= y2 && playerY <= y1))
+      ) return true;
+    }
+    // Horizontal barrier
+    if (y1 === y2) {
+      if (
+        ((playerY < y1 && newY >= y1) || (playerY > y1 && newY <= y1)) &&
+        ((playerX >= x1 && playerX <= x2) || (playerX >= x2 && playerX <= x1))
+      ) return true;
+    }
+  }
+  return false;
+}
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -29,16 +64,12 @@ function resizeCanvas() {
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const cols = 50 * 3;
-  const rows = 50 * 3;
+  const cols = 150;
+  const rows = 150;
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const sectionCol = Math.floor(col / 50);
-      const sectionRow = Math.floor(row / 50);
-      const sectionIndex = sectionRow * 3 + sectionCol;
-
-      ctx.fillStyle = shades[sectionIndex];
+      ctx.fillStyle = "#e0e0e0";
       ctx.fillRect(
         col * gridSize + offsetX,
         row * gridSize + offsetY,
@@ -54,34 +85,63 @@ function drawGrid() {
         gridSize
       );
 
-      // Draw coordinates in each tile
-      ctx.fillStyle = "#222";
+      // Draw coordinates in each tile with black text stroke
       ctx.font = "14px monospace";
-      ctx.fillText(
-        `(${col},${row})`,
-        col * gridSize + offsetX + 4,
-        row * gridSize + offsetY + 18
-      );
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#000";
+      ctx.fillStyle = "#fff";
+      const coordText = `(${col},${row})`;
+      const textX = col * gridSize + offsetX + 4;
+      const textY = row * gridSize + offsetY + 18;
+      ctx.strokeText(coordText, textX, textY);
+      ctx.fillText(coordText, textX, textY);
     }
   }
 
-  // Draw barriers
-  ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 4; // thicker for barriers
-  for (const b of barriers) {
-    const [x1, y1, x2, y2] = b;
+  // Draw barriers in red
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 4;
+  for (const [x1, y1, x2, y2] of barriers) {
     ctx.beginPath();
-    ctx.moveTo(x1 * 50 * gridSize + offsetX, y1 * 50 * gridSize + offsetY);
-    ctx.lineTo(x2 * 50 * gridSize + offsetX, y2 * 50 * gridSize + offsetY);
+    ctx.moveTo(x1 * gridSize + offsetX, y1 * gridSize + offsetY);
+    ctx.lineTo(x2 * gridSize + offsetX, y2 * gridSize + offsetY);
     ctx.stroke();
   }
+
+  // Draw player as a yellow dot
+  ctx.beginPath();
+  ctx.arc(
+    playerX * gridSize + offsetX + gridSize / 2,
+    playerY * gridSize + offsetY + gridSize / 2,
+    gridSize / 3,
+    0,
+    2 * Math.PI
+  );
+  ctx.fillStyle = "yellow";
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
 }
 
 function animate() {
-  if (keys.w) offsetY += speed;
-  if (keys.s) offsetY -= speed;
-  if (keys.a) offsetX += speed;
-  if (keys.d) offsetX -= speed;
+  let newX = playerX;
+  let newY = playerY;
+  if (keys.w) newY -= 1;
+  if (keys.s) newY += 1;
+  if (keys.a) newX -= 1;
+  if (keys.d) newX += 1;
+
+  // Only move if not blocked and within bounds
+  if (
+    newX >= 0 && newX < 150 &&
+    newY >= 0 && newY < 150 &&
+    !isBlocked(newX, newY)
+  ) {
+    playerX = newX;
+    playerY = newY;
+  }
+
   drawGrid();
   requestAnimationFrame(animate);
 }
