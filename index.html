@@ -6,13 +6,13 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 40px;
-      height: 40px;
+      width: 70px;
+      height: 70px;
       background: yellow;
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 10px #ff0;
       z-index: 10;
+      pointer-events: none;
     }
     html, body {
       margin: 0;
@@ -130,10 +130,11 @@
     #gameWindow {
         position: absolute;
         top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgb(72, 255, 56);
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         z-index: -999;
+        overflow: hidden;
     }
 
     #topRight { right: 10px; }
@@ -178,7 +179,8 @@
   </div>
 
   <div id="gameWindow">
-  <div class="clientPlayer"></div>
+    <canvas id="gridBg"></canvas>
+    <div class="clientPlayer"></div>
   </div>
 
   <script>
@@ -194,46 +196,8 @@
     if (inventoryBtn) {
       inventoryBtn.addEventListener("click", toggleInventory);
     }
-
-    // SMOOTH PLAYER MOVEMENT
-    const player = document.querySelector('.clientPlayer');
-    let px = window.innerWidth / 2;
-    let py = window.innerHeight / 2;
-    const speed = 1;
-    const keys = { w: false, a: false, s: false, d: false };
-
-    function updatePlayerPosition() {
-      player.style.left = px + 'px';
-      player.style.top = py + 'px';
-    }
-
-    function animate() {
-      if (keys.w) py -= speed;
-      if (keys.a) px -= speed;
-      if (keys.s) py += speed;
-      if (keys.d) px += speed;
-      // Clamp to window bounds
-      px = Math.max(20, Math.min(window.innerWidth - 20, px));
-      py = Math.max(20, Math.min(window.innerHeight - 20, py));
-      updatePlayerPosition();
-      requestAnimationFrame(animate);
-    }
-
-    updatePlayerPosition();
-    animate();
-
-    window.addEventListener('resize', () => {
-      px = window.innerWidth / 2;
-      py = window.innerHeight / 2;
-      updatePlayerPosition();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true;
-    });
-    document.addEventListener('keyup', function(e) {
-      if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false;
-    });
   </script>
+
+  <script src="game.js"></script>
 </body>
 </html>
