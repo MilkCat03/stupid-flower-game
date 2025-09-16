@@ -105,8 +105,14 @@
         margin: 10px;
         position: relative;
         color: white;
+        text-shadow: 
+          -1px -1px 0 black,
+           1px -1px 0 black,
+          -1px  1px 0 black,
+           1px  1px 0 black;
         font-size: 18px;
         font-weight: bold;
+        cursor: grab;
     }
 
     .item span {
@@ -127,6 +133,64 @@
 
     #topRight { right: 10px; }
     #topLeft { left: 10px; }
+
+    /* PETAL MANAGEMENT SYSTEM */
+    #petal-management {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      width: 90%;
+      max-width: 800px;
+      background-color: transparent;
+      border: none;
+      padding: 15px;
+      text-align: center;
+      color: white;
+    }
+
+    .build {
+      margin: 15px 0;
+    }
+
+    .build h2 {
+      margin: 10px 0;
+      font-size: 20px;
+
+text-shadow: 
+          -1px -1px 0 black,
+           1px -1px 0 black,
+          -1px  1px 0 black,
+           1px  1px 0 black;    }
+
+    .slots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .slot {
+      width: 60px;
+      height: 60px;
+      background-color: #eee;
+      border: 2px dashed #666;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #666;
+      cursor: pointer;
+      transition: background 0.2s, border 0.2s;
+    }
+
+    .slot.filled {
+      border-style: solid;
+      background-color: #fff;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -144,32 +208,39 @@
         <h1>Inventory</h1>
         <p>Drag to equip petal</p>
 
-        <div class="item">
+        <div class="item" draggable="true" data-icon="●" data-name="Basic">
           ●
           <span>Basic</span>
         </div>
 
-        <div class="item">
-          ●
-          <span>Basic</span>
+        <div class="item" draggable="true" data-icon="💎" data-name="Rock">
+          💎
+          <span>Rock</span>
         </div>
 
-        <div class="item">
-          ●
-          <span>Basic</span>
-        </div>
-
-        <div class="item">
-          ●
-          <span>Basic</span>
+        <div class="item" draggable="true" data-icon="🌸" data-name="Flower">
+          🌸
+          <span>Flower</span>
         </div>
     </div>
   </div>
 
   <div id="gameWindow">
     <canvas id="gridBg"></canvas>
-
   </div>
+
+  <!-- Petal Management -->
+  <div id="petal-management">
+    <div class="build" id="build1">
+      <h2>Build</h2>
+      <div class="slots">
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+        <div class="slot"></div>
+      </div>
+    </div>
 
   <script>
     var inventoryShown = false;
@@ -185,6 +256,11 @@
       inventoryBtn.addEventListener("click", toggleInventory);
     }
   </script>
-  <script src="connectServer.js"></script>
+
+  <script src="scripts/connectServer.js"></script>
+  <script src="scripts/hitboxes.js"></script>
+  <script src="scripts/petalData.js"></script>
+  <script src="scripts/render.js"></script>
+  <script src="scripts/inventory.js"></script>
 </body>
 </html>

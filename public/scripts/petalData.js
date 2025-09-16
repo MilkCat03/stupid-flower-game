@@ -1,0 +1,60 @@
+window.petalData = [
+    { name: "Basic", Damage: 1, Cooldown: 1, Health: 1, Description: "A basic petal with balanced stats.", icon: "⚪" },
+    { name: "Rock", Damage: 10, Cooldown: 5, Health: 10, Description: "ooga booga rock", icon: "💎" }
+];
+
+window.colors = {
+    common: ['#90ee90','#2aa12aff'],
+    unusual: ['#ffff99','#69691bff'],
+    rare: ['#add8e6','#4682b4'],
+    epic: ['#9370db','#7102c0ff'],
+    legendary: ['#ff4500','#8b0000'],
+    mythic: ['#00ffff','#008b8b'],
+    ultra: ['#ff69b4','#c71585'],
+    super: ['#3cb371','#2e8b57'],
+    hyper: ['#2f4f4f','#1c2b2b'],
+    default: ['#808080','#404040']
+};
+
+window.mobs = [
+  { name: "Ant Hole", Damage: 25, icon: "🐜" },
+  { name: "Avacado", Damage: 25, icon: "🥑" },
+  { name: "Baby Ant", Damage: 20, icon: "🐜" },
+  { name: "Baby Fire Ant", Damage: 25, icon: "🔥🐜" },
+  { name: "Bee", Damage: 10, icon: "🐝" },
+  { name: "Beehive", Damage: 5, icon: "🍯" },
+  { name: "Beetle", Damage: 15, icon: "🐞" },
+  { name: "Bubble", Damage: 10, icon: "🫧" },
+  { name: "Bush", Damage: 10, icon: "🌿" },
+  { name: "Cactus", Damage: 5, icon: "🌵" },
+  { name: "Crab", Damage: 20, icon: "🦀" },
+  { name: "Dark Ladybug", Damage: 20, icon: "🐞" },
+  { name: "Dice", Damage: 15, icon: "🎲" },
+  { name: "Dragon", Damage: 100, icon: "🐉" },
+  { name: "Dragon Nest", Damage: 70, icon: "🪺" },
+  { name: "Fossil", Damage: 5, icon: "🦴" },
+  { name: "Furry", Damage: 30, icon: "🦊" },
+  { name: "Ghost", Damage: 5, icon: "👻" },
+  { name: "Guardian", Damage: 50, icon: "🛡️" },
+  { name: "Hornet", Damage: 20, icon: "🐝" },
+  { name: "Jellyfish", Damage: 20, icon: "🪼" },
+  { name: "Ladybug", Damage: 15, icon: "🐞" },
+  { name: "M28", Damage: 10, icon: "🔫" },
+  { name: "Mob Article Template", Damage: 10, icon: "📄" },
+  { name: "Nigersaurus", Damage: 100, icon: "🦖" },
+  { name: "Pacman", Damage: 35, icon: "🟡" },
+  { name: "PedoX", Damage: 40, icon: "🕷️" },
+  { name: "Petaler", Damage: 10, icon: "🌸" },
+  { name: "Queen Ant", Damage: 80, icon: "👑🐜" },
+  { name: "Rock", Damage: 1, icon: "⚫" },
+  { name: "Scorpion", Damage: 60, icon: "🦂" },
+  { name: "Snail", Damage: 30, icon: "🐌" },
+  { name: "Spider", Damage: 30, icon: "🕷️" },
+  { name: "Spider Cave", Damage: 50, icon: "🕸️" },
+  { name: "Spider Yoba", Damage: 60, icon: "🕷️" },
+  { name: "Statue", Damage: 0, icon: "🗿" },
+  { name: "Stickbug", Damage: 20, icon: "🐛" },
+  { name: "Tumbleweed", Damage: 5, icon: "🌾" },
+  { name: "Yellow Ladybug", Damage: 15, icon: "🐞" },
+  { name: "Yoba", Damage: 50, icon: "🕷️" }
+];
