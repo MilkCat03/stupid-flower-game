@@ -28,8 +28,8 @@ const barriers = [
 ];
 
 // Player position in grid coordinates
-let playerX = 75;
-let playerY = 75;
+let playerX = Math.floor(Math.random() * 50);
+let playerY = Math.floor(Math.random() * 50);
 
 // Helper to check if movement crosses a barrier
 function isBlocked(newX, newY) {
