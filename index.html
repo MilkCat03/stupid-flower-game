@@ -1,19 +1,6 @@
 <html>
 <head>
   <style>
-    /* PLAYER DOT */
-    .clientPlayer {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 70px;
-      height: 70px;
-      background: yellow;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      pointer-events: none;
-    }
     html, body {
       margin: 0;
       font-family: sans-serif;
@@ -135,6 +122,7 @@
         height: 100vh;
         z-index: -999;
         overflow: hidden;
+        background-color: #09351f;
     }
 
     #topRight { right: 10px; }
@@ -180,7 +168,7 @@
 
   <div id="gameWindow">
     <canvas id="gridBg"></canvas>
-    <div class="clientPlayer"></div>
+
   </div>
 
   <script>
@@ -197,7 +185,8 @@
       inventoryBtn.addEventListener("click", toggleInventory);
     }
   </script>
-
-  <script src="game.js"></script>
+  <script src="connectServer.js"></script>
+  <script src="petalLogic.js"></script>
+  <script src="render.js"></script>
 </body>
 </html>
