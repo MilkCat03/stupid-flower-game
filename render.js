@@ -15,12 +15,9 @@ const shades = [
 
 const keys = { w: false, a: false, s: false, d: false, shift: false, space: false };
 
-let playerX = Math.floor(Math.random() * 50);
-let playerY = Math.floor(Math.random() * 50);
-
 let offsetX = 0;
 let offsetY = 0;
-let playerSpeed = 0.012;
+
 let playerSize = gridSize / 5;
 let playerEmoji = "😃";
 

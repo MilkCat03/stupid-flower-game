@@ -1,13 +1,41 @@
 let connected = false;
+let playerId = null;
+let playerX = 0;
+let playerY = 0;
+let playerInventory = [];
+let petalSlots = 0;
 
-fetch('http://localhost:3000/connect')
-    .then(response => {
-        if (response.ok) {
-            connected = true;
-            console.log('Connected to server');
-        } else {
-            throw new Error(`Server response not OK. Status: ${response.status} ${response.statusText}`);
-        }
+fetch('https://76a2b3cd-4971-4e70-952e-74a94a725d6b-00-5rcgg7jt3bol.spock.replit.dev/connect')
+    .then(response => response.json())
+    .then(data => {
+        connected = true;
+
+        // Pull all player variables from server
+        playerId = data.playerId;
+        playerX = data.x || 0;
+        playerY = data.y || 0;
+        playerInventory = data.inventory || [];
+        petalSlots = data.petalSlots || 5;
+
+        console.log('Connected to server');
+        console.log('Player ID:', playerId);
+        console.log('Position:', playerX, playerY);
+        console.log('Inventory:', playerInventory);
+        console.log('Petal Slots:', petalSlots);
+
+        // Initialize WebSocket
+        initWebSocket();
+
+        // Dynamically load external scripts
+        loadScript('petalLogic.js', () => {
+            console.log('petalLogic.js loaded');
+            loadScript('render.js', () => {
+                console.log('render.js loaded');
+                // Optionally, call a function from render.js to start rendering
+                if (typeof initRender === 'function') initRender();
+            });
+        });
+
     })
     .catch(error => {
         const errorDetails = `
@@ -30,7 +58,33 @@ fetch('http://localhost:3000/connect')
         document.body.style.flexDirection = 'column';
         document.body.style.justifyContent = 'center';
         document.body.style.alignItems = 'center';
-    }
-);
+    });
 
+// Helper function to dynamically load JS files
+function loadScript(src, callback) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = callback;
+    script.onerror = () => console.error(`Failed to load ${src}`);
+    document.body.appendChild(script);
+}
 
+// Example WebSocket init function
+function initWebSocket() {
+    const ws = new WebSocket('ws://localhost:3000');
+
+    ws.onopen = () => {
+        console.log('WebSocket connected');
+    };
+
+    ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'update') {
+            console.log('Updated player positions:', message.players);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('WebSocket disconnected');
+    };
+}

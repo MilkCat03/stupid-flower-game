@@ -1,7 +1,7 @@
-const petalCount = 5;
 const rotationSpeed = 0.75;
 const rotationMultiplier = 1;
 const distanceMultiplier = 1;
+let playerSpeed = 0.012;
 
 function renderPetals(ctx, playerX, playerY, offsetX, offsetY, playerSize, playerEmoji, gridSize) {
   const time = Date.now() * rotationSpeed * rotationMultiplier * 0.001;
