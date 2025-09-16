@@ -1,6 +1,6 @@
 let connected = false;
 
-fetch('https://9mbsrrxs-3000.usw3.devtunnels.ms/connect')
+fetch('http://localhost:3000/connect')
     .then(response => {
         if (response.ok) {
             connected = true;
