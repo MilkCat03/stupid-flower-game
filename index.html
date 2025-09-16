@@ -1,0 +1,239 @@
+<html>
+<head>
+  <style>
+    /* PLAYER DOT */
+    .clientPlayer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 40px;
+      height: 40px;
+      background: yellow;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px #ff0;
+      z-index: 10;
+    }
+    html, body {
+      margin: 0;
+      font-family: sans-serif;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    #ui {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    #left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        background: #f4f4f4;
+        width: auto;
+        height: 200px;
+        align-items: flex-start;
+        justify-content: flex-end;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+    }
+
+    #left button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    #left img {
+      width: 24px;
+      height: 24px;
+    }
+
+    #topRight, #topLeft {
+      position: absolute;
+      top: 10px;
+    }
+
+    /* INVENTORY PANEL */
+    #inventory {
+        position: absolute;
+        bottom: 20px;
+        left: 150px;
+        display: none;
+        width: 500px;
+        height: 700px;
+        background-color: #5da9e9;
+        border: 3px solid #3c7dbf;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        overflow: auto;
+    }
+
+    #inventory h1 {
+        margin: 15px 0 5px;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 1px 1px #000;
+    }
+
+    #inventory p {
+        margin: 0 0 20px;
+        font-size: 18px;
+        color: white;
+    }
+
+    #inventory .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+        background-color: #ff4d4d;
+    }
+
+    .item {
+        display: inline-block;
+        background-color: #67d167;
+        border: 3px solid #3c9b3c;
+        border-radius: 8px;
+        padding: 20px;
+        width: 50px;
+        height: 50px;
+        margin: 10px;
+        position: relative;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .item span {
+        display: block;
+        margin-top: 8px;
+    }
+
+    #gameWindow {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(72, 255, 56);
+        z-index: -999;
+    }
+
+    #topRight { right: 10px; }
+    #topLeft { left: 10px; }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div id="left">
+      <button><img src="https://placehold.co/400" alt="Inventory"> Inventory</button>
+      <button><img src="https://placehold.co/400" alt="Absorb"> Absorb</button>
+      <button><img src="https://placehold.co/400" alt="Craft"> Craft</button>
+      <button><img src="https://placehold.co/400" alt="Mobs"> Mobs</button>
+    </div>
+
+    <div id="inventory">
+        <button class="close-btn" onclick="toggleInventory()">X</button>
+    
+        <h1>Inventory</h1>
+        <p>Drag to equip petal</p>
+
+        <div class="item">
+          ●
+          <span>Basic</span>
+        </div>
+
+        <div class="item">
+          ●
+          <span>Basic</span>
+        </div>
+
+        <div class="item">
+          ●
+          <span>Basic</span>
+        </div>
+
+        <div class="item">
+          ●
+          <span>Basic</span>
+        </div>
+    </div>
+  </div>
+
+  <div id="gameWindow">
+  <div class="clientPlayer"></div>
+  </div>
+
+  <script>
+    var inventoryShown = false;
+    var inventoryFrame = document.getElementById("inventory");
+    var inventoryBtn = document.querySelector("#left button");
+
+    function toggleInventory() {
+      inventoryShown = !inventoryShown;
+      inventoryFrame.style.display = inventoryShown ? "block" : "none";
+    }
+
+    if (inventoryBtn) {
+      inventoryBtn.addEventListener("click", toggleInventory);
+    }
+
+    // SMOOTH PLAYER MOVEMENT
+    const player = document.querySelector('.clientPlayer');
+    let px = window.innerWidth / 2;
+    let py = window.innerHeight / 2;
+    const speed = 1;
+    const keys = { w: false, a: false, s: false, d: false };
+
+    function updatePlayerPosition() {
+      player.style.left = px + 'px';
+      player.style.top = py + 'px';
+    }
+
+    function animate() {
+      if (keys.w) py -= speed;
+      if (keys.a) px -= speed;
+      if (keys.s) py += speed;
+      if (keys.d) px += speed;
+      // Clamp to window bounds
+      px = Math.max(20, Math.min(window.innerWidth - 20, px));
+      py = Math.max(20, Math.min(window.innerHeight - 20, py));
+      updatePlayerPosition();
+      requestAnimationFrame(animate);
+    }
+
+    updatePlayerPosition();
+    animate();
+
+    window.addEventListener('resize', () => {
+      px = window.innerWidth / 2;
+      py = window.innerHeight / 2;
+      updatePlayerPosition();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = true;
+    });
+    document.addEventListener('keyup', function(e) {
+      if (e.key.toLowerCase() in keys) keys[e.key.toLowerCase()] = false;
+    });
+  </script>
+</body>
+</html>
